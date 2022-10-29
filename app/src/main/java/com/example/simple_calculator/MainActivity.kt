@@ -56,7 +56,13 @@ class MainActivity : AppCompatActivity() {
                 dotPresent = true
         }
 
+        if (isOperatorAdded(tvInput?.text.toString()) && lastNumeric){
+            dotPresent = false
+        }
+
         if (!dotPresent) {
+            if (!lastNumeric)
+                tvInput?.append("0")
             tvInput?.append(".")
             lastNumeric = false
         }
@@ -73,6 +79,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun removeZeroAfterDot(result: String): String{
+        var value = result
+        val splitValue = value.split(".")
+        val afterPoint = splitValue[1]
+        if (afterPoint == "0")
+            return splitValue[0]
+        return value
+    }
+
     // To check whether the last element on the text view is an operator or not
     private fun isOperatorAdded(value: String): Boolean{
         return if(value.startsWith("-")) {
@@ -83,6 +98,81 @@ class MainActivity : AppCompatActivity() {
             value.contains("/") || value.contains("*")
                     || value.contains("+")
                     || value.contains("-")
+        }
+    }
+
+    fun onEqual(view: View){
+        if (lastNumeric){
+            var tvValue = tvInput?.text.toString()
+            var prefix = ""
+            var result = ""
+
+            try{
+                if (tvValue.startsWith("-")) {  // If tvValue starts with "-"
+                    prefix = "-"
+                    tvValue = tvValue.substring(1)       // removes "-" from tvValue
+                }
+
+                if (tvValue.contains("-")) {
+                    val splitValue = tvValue.split("-")
+                    // Splits string at "-" and stores it in an array
+                    var firstOperand = splitValue[0]
+                    var secondOperand = splitValue[1]
+
+                    if (prefix.isNotEmpty()){
+                        firstOperand = prefix + firstOperand
+                    }
+
+                    result = (firstOperand.toDouble() - secondOperand.toDouble()).toString()
+                }
+
+                else if (tvValue.contains("+")) {
+                    val splitValue = tvValue.split("+")
+                    // Splits string at "-" and stores it in an array
+                    var firstOperand = splitValue[0]
+                    var secondOperand = splitValue[1]
+
+                    if (prefix.isNotEmpty()){
+                        firstOperand = prefix + firstOperand
+                    }
+
+                    result = (firstOperand.toDouble() + secondOperand.toDouble()).toString()
+                }
+
+                else if (tvValue.contains("*")) {
+                    val splitValue = tvValue.split("*")
+                    // Splits string at "-" and stores it in an array
+                    var firstOperand = splitValue[0]
+                    var secondOperand = splitValue[1]
+
+                    if (prefix.isNotEmpty()){
+                        firstOperand = prefix + firstOperand
+                    }
+
+                    result = (firstOperand.toDouble() * secondOperand.toDouble()).toString()
+                }
+
+                else if (tvValue.contains("/")) {
+                    val splitValue = tvValue.split("/")
+                    // Splits string at "-" and stores it in an array
+                    var firstOperand = splitValue[0]
+                    var secondOperand = splitValue[1]
+
+                    if (prefix.isNotEmpty()){
+                        firstOperand = prefix + firstOperand
+                    }
+
+                    result = (firstOperand.toDouble() / secondOperand.toDouble()).toString()
+                }
+
+                if (result != "") {
+                    result = removeZeroAfterDot(result)
+                    tvInput?.text = result
+                }
+
+            }catch(e: java.lang.ArithmeticException){
+            e.printStackTrace()             // prints error into the logcat
+            }
         }
     }
 }

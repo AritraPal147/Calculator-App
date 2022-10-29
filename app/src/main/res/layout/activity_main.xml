@@ -322,7 +322,7 @@
             android:textSize="25sp"
             android:backgroundTint="@color/btnBgBlue"
             android:textColor="@color/white"
-            android:onClick="onDigit"
+            android:onClick="onEqual"
             tools:ignore="UsingOnClickInXml"
             />
 
