@@ -48,8 +48,7 @@ class MainActivity : AppCompatActivity() {
         val v= tvInput?.text
         dotPresent = false
     }
-
-    // Has to be changed to facilitate 0.9*0.3
+    
     fun onDecimalPoint(view: View){
         for (i in tvInput?.text.toString()){        // Checking if "." is present in text View or not
             if (i == '.')
